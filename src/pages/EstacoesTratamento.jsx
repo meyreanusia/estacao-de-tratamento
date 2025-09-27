@@ -1,0 +1,77 @@
+import Cards from "../components/Cards"
+import { useState, useEffect } from "react";
+
+function Estacoes(){
+
+const [estacoes, setEstacoes] = useState([]);
+  const [erro, setErro] = useState("");
+
+  const fetchEstacoes = async () => {
+    try {
+      const token = localStorage.getItem("token"); // pega o token salvo no login
+      const response = await fetch("http://localhost:3000/estacoes", {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar estações");
+      }
+
+      const data = await response.json();
+      setEstacoes(data); 
+      console.log(data);
+      
+    } catch (error) {
+      setErro(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchEstacoes();
+  }, []);
+
+
+    return(
+        <div className="h-100">
+            <div className="d-flex justify-content-between container-header col-12 mb-2">
+                <div className=" col-5">
+                    <div className="input-group flex-nowrap d-flex flex-column">
+                         <h5 className="form-label">Estação de tratamento cadastradas</h5>
+                        <input type="text" className="form-control w-100" placeholder="O que procuta?" aria-label="busca" aria-describedby="busca-estacap"/>
+                    </div>
+                </div>
+        
+                <div className="d-grid gap-2 col-2">
+                        <button
+                        type="submit"
+                        className="btn btn-primary"
+                        style={{ backgroundColor: "#6c5ce7", border: "none", maxHeight: "35px", textAlign: "center" }}
+                        >
+                        Novo
+                        </button>
+
+                </div>
+            </div>
+             {erro && <div className="alert alert-danger">{erro}</div>}
+            
+            <section className="container-cards">
+                {
+                    estacoes.length > 0 ? (
+                        estacoes.map(estacao => (
+                            <Cards key={estacao.id} estacao={estacao}/>
+                        )) 
+                    ) : (<p>Nenhuma estação encontrada!</p>)
+                }
+
+            </section>
+            
+        </div>
+
+        
+    )
+}
+
+export default Estacoes
