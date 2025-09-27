@@ -2,7 +2,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
-// import Estacoes from './pages/Estacoes';
+import Estacoes from './pages/EstacoesTratamento';
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
     <>
   <Routes>
       <Route path="/" element={<Login />} />
-      {/* <Route path="/estacoes" element={<Estacoes />} /> */}
+      <Route path="/estacoes" element={<Estacoes />} />
     </Routes>
     </>
   )
