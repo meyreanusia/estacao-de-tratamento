@@ -34,13 +34,35 @@ const navigate = useNavigate();
     }
   };
 
-  useEffect(() => {
-    fetchEstacoes();
-  }, []);
-     // Filtra as estações de acordo com o input
-  const filteredEstacoes = estacoes.filter(estacao =>
-    estacao.descricao.toLowerCase().includes(search.toLowerCase())
-  );
+      useEffect(() => {
+        fetchEstacoes();
+      }, []);
+        // Filtra as estações de acordo com o input
+      const filteredEstacoes = estacoes.filter(estacao =>
+        estacao.descricao.toLowerCase().includes(search.toLowerCase())
+      );
+
+      const handleEdit = (estacao) => {
+      navigate(`/cadastro-estacoes/`, { state: { estacao } });
+    };
+
+    const handleDelete = async (id) => {
+      const token = localStorage.getItem("token");
+      if (!window.confirm("Deseja realmente deletar esta estação?")) return;
+
+      try {
+        const response = await fetch(`http://localhost:3000/estacoes/${id}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error("Erro ao deletar estação");
+
+        setEstacoes(estacoes.filter(est => est.id !== id));
+      } catch (error) {
+        alert(error.message);
+      }
+    };
 
     return(
         <div className="h-100">
@@ -70,7 +92,12 @@ const navigate = useNavigate();
                 {
                     filteredEstacoes.length > 0 ? (
                         filteredEstacoes.map(estacao => (
-                            <Cards key={estacao.id} estacao={estacao}/>
+                            <Cards 
+                              key={estacao.id}
+                              estacao={estacao} 
+                              onEdit={handleEdit}
+                              onDelete={handleDelete}
+                            />
                         )) 
                     ) : (<p>Nenhuma estação encontrada!</p>)
                 }

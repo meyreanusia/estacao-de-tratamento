@@ -1,10 +1,16 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 
 function CadastroEstacaoTratamento(){
 
-    const [form, setForm] = useState({
+    const location = useLocation();
+    const navigate = useNavigate();
+
+     const estacaoParaEditar = location.state?.estacao;
+
+    const [form, setForm] = useState(
+      estacaoParaEditar || {
         nome: "",
         descricao: "",
         urlImagem: "",
@@ -20,7 +26,6 @@ function CadastroEstacaoTratamento(){
         dataInicioOperacao: "",
   });
 
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -48,9 +53,14 @@ function CadastroEstacaoTratamento(){
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
+       const url = estacaoParaEditar
+      ? `http://localhost:3000/estacoes/${estacaoParaEditar.id}` // Update
+      : "http://localhost:3000/estacoes"; // Create
 
-    const response = await fetch("http://localhost:3000/estacoes", {
-      method: "POST",
+      const method = estacaoParaEditar ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method,
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
@@ -75,12 +85,12 @@ function CadastroEstacaoTratamento(){
 
             <div className="container-cadastro d-flex gap-4">
                 <div className="col-5">
-                    <input className="form-control mb-2" name="nome" placeholder="Nome" onChange={handleChange} />
-                    <textarea className="form-control mb-2" name="descricao" placeholder="Descrição" onChange={handleChange} />
-                    <input className="form-control mb-2" name="urlImagem" placeholder="URL da Imagem" onChange={handleChange} />
-                    <input type="number" className="form-control mb-2" name="capacidadeToneladas" placeholder="Capacidade (Toneladas)" onChange={handleChange} />
-                    <input className="form-control mb-2" name="tipoTratamento" placeholder="Tipo de Tratamento" onChange={handleChange} />
-                    <input type="date" className="form-control mb-2" name="dataInicioOperacao" onChange={handleChange} />   
+                    <input className="form-control mb-2" name="nome" value={form.nome} placeholder="Nome" onChange={handleChange} />
+                    <textarea className="form-control mb-2" name="descricao" value={form.descricao} placeholder="Descrição" onChange={handleChange} />
+                    <input className="form-control mb-2" name="urlImagem" value={form.urlImagem} placeholder="URL da Imagem" onChange={handleChange} />
+                    <input type="number" className="form-control mb-2" name="capacidadeToneladas" value={form.capacidadeToneladas} placeholder="Capacidade (Toneladas)" onChange={handleChange} />
+                    <input className="form-control mb-2" name="tipoTratamento" placeholder="Tipo de Tratamento" value={form.tipoTratamento} onChange={handleChange} />
+                    <input type="date" className="form-control mb-2" name="dataInicioOperacao" value={form.dataInicioOperacao} onChange={handleChange} />   
                 </div>
 
 
@@ -91,10 +101,10 @@ function CadastroEstacaoTratamento(){
                     <input className="form-control mb-2" name="cidade" placeholder="Cidade" value={form.cidade} onChange={handleChange} />
                     <div className="d-flex gap-3">
                         <input className="form-control mb-2" name="estado" placeholder="Estado" value={form.estado} onChange={handleChange} />
-                         <input className="form-control mb-2" name="numero" placeholder="Número" onChange={handleChange} />
+                         <input className="form-control mb-2" name="numero" placeholder="Número" value={form.numero} onChange={handleChange} />
                     </div>
                     
-                    <input className="form-control mb-2" name="complemento" placeholder="Complemento" onChange={handleChange} />
+                    <input className="form-control mb-2" name="complemento" placeholder="Complemento" value={form.complemento} onChange={handleChange} />
                 </div>
 
             </div>
