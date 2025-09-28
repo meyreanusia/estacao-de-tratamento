@@ -7,8 +7,9 @@ const navigate = useNavigate();
   const irParaCadastro = () => {
     navigate("/cadastro-estacoes");
   };
-const [estacoes, setEstacoes] = useState([]);
+  const [estacoes, setEstacoes] = useState([]);
   const [erro, setErro] = useState("");
+  const [search, setSearch] = useState("");
 
   const fetchEstacoes = async () => {
     try {
@@ -36,7 +37,10 @@ const [estacoes, setEstacoes] = useState([]);
   useEffect(() => {
     fetchEstacoes();
   }, []);
-
+     // Filtra as estações de acordo com o input
+  const filteredEstacoes = estacoes.filter(estacao =>
+    estacao.descricao.toLowerCase().includes(search.toLowerCase())
+  );
 
     return(
         <div className="h-100">
@@ -44,7 +48,7 @@ const [estacoes, setEstacoes] = useState([]);
                 <div className=" col-6">
                     <div className="input-group flex-nowrap d-flex flex-column">
                          <h5 className="form-label">Estação de tratamento cadastradas</h5>
-                        <input type="text" className="form-control w-100" placeholder="O que procuta?" aria-label="busca" aria-describedby="busca-estacap"/>
+                        <input type="text" className="form-control w-100" placeholder="O que procuta?" aria-label="busca" aria-describedby="busca-estacap" onChange={(e) => setSearch(e.target.value)} />
                     </div>
                 </div>
         
@@ -64,8 +68,8 @@ const [estacoes, setEstacoes] = useState([]);
             
             <section className="container-cards d-flex gap-5">
                 {
-                    estacoes.length > 0 ? (
-                        estacoes.map(estacao => (
+                    filteredEstacoes.length > 0 ? (
+                        filteredEstacoes.map(estacao => (
                             <Cards key={estacao.id} estacao={estacao}/>
                         )) 
                     ) : (<p>Nenhuma estação encontrada!</p>)
