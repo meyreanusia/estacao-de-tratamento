@@ -37,7 +37,7 @@ const [estacoes, setEstacoes] = useState([]);
     return(
         <div className="h-100">
             <div className="d-flex justify-content-between container-header col-12 mb-2">
-                <div className=" col-5">
+                <div className=" col-6">
                     <div className="input-group flex-nowrap d-flex flex-column">
                          <h5 className="form-label">Estação de tratamento cadastradas</h5>
                         <input type="text" className="form-control w-100" placeholder="O que procuta?" aria-label="busca" aria-describedby="busca-estacap"/>
