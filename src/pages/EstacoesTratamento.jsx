@@ -1,8 +1,12 @@
 import Cards from "../components/Cards"
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 function Estacoes(){
+const navigate = useNavigate();
 
+  const irParaCadastro = () => {
+    navigate("/cadastro-estacoes");
+  };
 const [estacoes, setEstacoes] = useState([]);
   const [erro, setErro] = useState("");
 
@@ -49,6 +53,7 @@ const [estacoes, setEstacoes] = useState([]);
                         type="submit"
                         className="btn btn-primary"
                         style={{ backgroundColor: "#6c5ce7", border: "none", maxHeight: "35px", textAlign: "center" }}
+                        onClick={irParaCadastro}
                         >
                         Novo
                         </button>
@@ -57,7 +62,7 @@ const [estacoes, setEstacoes] = useState([]);
             </div>
              {erro && <div className="alert alert-danger">{erro}</div>}
             
-            <section className="container-cards">
+            <section className="container-cards d-flex gap-5">
                 {
                     estacoes.length > 0 ? (
                         estacoes.map(estacao => (
